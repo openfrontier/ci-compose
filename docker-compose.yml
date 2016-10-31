@@ -1,0 +1,48 @@
+version: '2'
+networks:
+  ci-network:
+volumes:
+  openldap-volume:
+  openldap-lib-volume:
+  pg-gerrit-volume:
+  gerrit-volume:
+services:
+  pg-gerrit:
+    image: postgres
+    networks:
+     - ci-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-gerrit-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: gerrit2
+      POSTGRES_PASSWORD: gerrit
+      POSTGRES_DB: reviewdb
+  gerrit:
+    image: openfrontier/gerrit:ci
+    networks:
+     - ci-network
+    ports:
+     - "80:8080"
+     - "29418:29418"
+    volumes:
+     - gerrit-volume:/var/gerrit/review_site
+    depends_on:
+     - "pg-gerrit"
+    environment:
+      WEBURL: http://172.20.201.201/gerrit
+      HTTPD_LISTENURL: proxy-http://*:8080/gerrit
+      DATABASE_TYPE: postgresql
+      DB_PORT_5432_TCP_ADDR: pg-gerrit
+      DB_PORT_5432_TCP_PORT: 5432
+      DB_ENV_POSTGRES_DB: reviewdb
+      DB_ENV_POSTGRES_USER: gerrit2
+      DB_ENV_POSTGRES_PASSWORD: gerrit
+      AUTH_TYPE: LDAP
+      LDAP_SERVER: ldap://172.20.201.201
+      LDAP_ACCOUNTBASE: ou=accounts,dc=example,dc=com 
+      #LDAP_GROUPBASE: ou=groups,dc=example,dc=com
+      INITIAL_ADMIN_USER: admin
+      INITIAL_ADMIN_PASSWORD: passwd
+      GERRIT_INIT_ARGS: --install-plugin=download-commands
