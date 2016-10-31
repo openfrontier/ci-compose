@@ -2,13 +2,13 @@ version: '2'
 networks:
   ci-network:
 volumes:
-  openldap-volume:
-  openldap-lib-volume:
   pg-gerrit-volume:
   gerrit-volume:
+  jenkins-volume:
 services:
   pg-gerrit:
     image: postgres
+    restart: unless-stopped
     networks:
      - ci-network
     ports:
@@ -21,6 +21,7 @@ services:
       POSTGRES_DB: reviewdb
   gerrit:
     image: openfrontier/gerrit:ci
+    restart: unless-stopped
     networks:
      - ci-network
     ports:
@@ -46,3 +47,23 @@ services:
       INITIAL_ADMIN_USER: admin
       INITIAL_ADMIN_PASSWORD: passwd
       GERRIT_INIT_ARGS: --install-plugin=download-commands
+      JENKINS_HOST: jenkins
+  jenkins:
+    restart: unless-stopped
+    image: openfrontier/jenkins:alpine
+    networks:
+     - ci-network
+    ports:
+     - "81:8080"
+     - "50000:50000"
+    volumes:
+     - jenkins-volume:/var/jenkins_home
+    environment:
+      JAVA_OPTS: "-Duser.timezone=Asia/Shanghai -Djenkins.install.runSetupWizard=false"
+      LDAP_SERVER: ldap://172.20.201.201
+      LDAP_ROOTDN: ou=accounts,dc=example,dc=com
+      LDAP_INHIBIT_INFER_ROOTDN: 'false'
+      LDAP_DISABLE_MAIL_ADDRESS_RESOLVER: 'false'
+      GERRIT_HOST_NAME: gerrit
+      GERRIT_FRONT_END_URL: http://172.20.201.201/gerrit
+      JENKINS_OPTS: --prefix=/jenkins
