@@ -20,12 +20,12 @@ services:
       POSTGRES_PASSWORD: gerrit
       POSTGRES_DB: reviewdb
   gerrit:
-    image: openfrontier/gerrit:ci
+    image: openfrontier/gerrit-ci
     restart: unless-stopped
     networks:
      - ci-network
     ports:
-     - "80:8080"
+     - "8080"
      - "29418:29418"
     volumes:
      - gerrit-volume:/var/gerrit/review_site
@@ -54,7 +54,7 @@ services:
     networks:
      - ci-network
     ports:
-     - "81:8080"
+     - "8080"
      - "50000:50000"
     volumes:
      - jenkins-volume:/var/jenkins_home
@@ -67,3 +67,16 @@ services:
       GERRIT_HOST_NAME: gerrit
       GERRIT_FRONT_END_URL: http://172.20.201.201/gerrit
       JENKINS_OPTS: --prefix=/jenkins
+  proxy:
+    restart: unless-stopped
+    image: openfrontier/nginx:ci
+    networks:
+     - ci-network
+    ports:
+     - "80:80"
+    depends_on:
+     - "gerrit"
+     - "jenkins"
+    environment:
+      SERVER_NAME: 172.20.201.201
+      CLIENT_MAX_BODY_SIZE: 200m
