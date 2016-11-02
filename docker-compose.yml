@@ -5,6 +5,7 @@ volumes:
   pg-gerrit-volume:
   gerrit-volume:
   jenkins-volume:
+  nexus-volume:
 services:
   pg-gerrit:
     image: postgres
@@ -78,6 +79,7 @@ services:
     depends_on:
      - "gerrit"
      - "jenkins"
+     - "nexus"
     environment:
       constraint:node: =${PROXY_NODE}
       SERVER_NAME: ${PROXY_HOST}
@@ -105,3 +107,14 @@ services:
     environment:
       NEXUS_REPO: ${NEXUS_URI}
     command: -master http://jenkins:8080/jenkins/ -labels ${JENKINS_AGENT_LABEL} -mode exclusive -username ${CI_INIT_ADMIN} -password ${CI_INIT_PASSWORD} -executors 1
+  nexus:
+    restart: unless-stopped
+    image: openfrontier/nexus
+    networks:
+     - ci-network
+    ports:
+     - "8081"
+    environment:
+      CONTEXT_PATH: /nexus
+    volumes:
+     - nexus-volume:/sonatype-work
