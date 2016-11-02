@@ -67,6 +67,7 @@ services:
       GERRIT_HOST_NAME: gerrit
       GERRIT_FRONT_END_URL: http://${PROXY_HOST}/gerrit
       JENKINS_OPTS: --prefix=/jenkins
+      ROOT_RUL: http://${PROXY_HOST}/jenkins
   proxy:
     restart: unless-stopped
     image: openfrontier/nginx
@@ -93,3 +94,14 @@ services:
     environment:
       constraint:node: =${PROXY_NODE}
       GERRIT_HOST: gerrit
+  jenkins-agent:
+    restart: unless-stopped
+    image: openfrontier/jenkins-swarm-maven-slave
+    networks:
+     - ci-network
+    depends_on:
+     - "gerrit"
+     - "jenkins"
+    environment:
+      NEXUS_REPO: ${NEXUS_URI}
+    command: -master http://jenkins:8080/jenkins/ -labels ${JENKINS_AGENT_LABEL} -mode exclusive -username ${CI_INIT_ADMIN} -password ${CI_INIT_PASSWORD} -executors 1
