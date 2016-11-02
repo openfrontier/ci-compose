@@ -32,7 +32,7 @@ services:
     depends_on:
      - "pg-gerrit"
     environment:
-      WEBURL: http://172.20.201.201/gerrit
+      WEBURL: http://${PROXY_HOST}/gerrit
       HTTPD_LISTENURL: proxy-http://*:8080/gerrit
       DATABASE_TYPE: postgresql
       DB_PORT_5432_TCP_ADDR: pg-gerrit
@@ -41,11 +41,11 @@ services:
       DB_ENV_POSTGRES_USER: gerrit2
       DB_ENV_POSTGRES_PASSWORD: gerrit
       AUTH_TYPE: LDAP
-      LDAP_SERVER: ldap://172.20.201.201
-      LDAP_ACCOUNTBASE: ou=accounts,dc=example,dc=com 
+      LDAP_SERVER: ${LDAP_URI}
+      LDAP_ACCOUNTBASE: ${LDAP_ROOTDN}
       #LDAP_GROUPBASE: ou=groups,dc=example,dc=com
-      INITIAL_ADMIN_USER: admin
-      INITIAL_ADMIN_PASSWORD: passwd
+      INITIAL_ADMIN_USER: ${CI_INIT_ADMIN}
+      INITIAL_ADMIN_PASSWORD: ${CI_INIT_PASSWORD}
       GERRIT_INIT_ARGS: --install-plugin=download-commands
       JENKINS_HOST: jenkins
   jenkins:
@@ -60,16 +60,16 @@ services:
      - jenkins-volume:/var/jenkins_home
     environment:
       JAVA_OPTS: "-Duser.timezone=Asia/Shanghai -Djenkins.install.runSetupWizard=false"
-      LDAP_SERVER: ldap://172.20.201.201
-      LDAP_ROOTDN: ou=accounts,dc=example,dc=com
+      LDAP_SERVER: ${LDAP_URI}
+      LDAP_ROOTDN: ${LDAP_ROOTDN}
       LDAP_INHIBIT_INFER_ROOTDN: 'false'
       LDAP_DISABLE_MAIL_ADDRESS_RESOLVER: 'false'
       GERRIT_HOST_NAME: gerrit
-      GERRIT_FRONT_END_URL: http://172.20.201.201/gerrit
+      GERRIT_FRONT_END_URL: http://${PROXY_HOST}/gerrit
       JENKINS_OPTS: --prefix=/jenkins
   proxy:
     restart: unless-stopped
-    image: openfrontier/nginx:ci
+    image: openfrontier/nginx
     networks:
      - ci-network
     ports:
@@ -78,5 +78,6 @@ services:
      - "gerrit"
      - "jenkins"
     environment:
-      SERVER_NAME: 172.20.201.201
-      CLIENT_MAX_BODY_SIZE: 200m
+     - constraint:node==${PROXY_NODE}
+     - SERVER_NAME=${PROXY_HOST}
+     - CLIENT_MAX_BODY_SIZE=200m
