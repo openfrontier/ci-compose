@@ -26,7 +26,7 @@ services:
      - ci-network
     ports:
      - "8080"
-     - "29418:29418"
+     - "29418"
     volumes:
      - gerrit-volume:/var/gerrit/review_site
     depends_on:
@@ -78,6 +78,18 @@ services:
      - "gerrit"
      - "jenkins"
     environment:
-     - constraint:node==${PROXY_NODE}
-     - SERVER_NAME=${PROXY_HOST}
-     - CLIENT_MAX_BODY_SIZE=200m
+      constraint:node: =${PROXY_NODE}
+      SERVER_NAME: ${PROXY_HOST}
+      CLIENT_MAX_BODY_SIZE: 200m
+  haproxy:
+    restart: unless-stopped
+    image: openfrontier/haproxy
+    networks:
+     - ci-network
+    ports:
+     - "29418:29418"
+    depends_on:
+     - "gerrit"
+    environment:
+      constraint:node: =${PROXY_NODE}
+      GERRIT_HOST: gerrit
