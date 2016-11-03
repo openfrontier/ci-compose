@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: gerrit
       POSTGRES_DB: reviewdb
   gerrit:
-    image: openfrontier/gerrit-ci
+    image: openfrontier/gerrit-ci:${GERRIT_VERSION}
     restart: unless-stopped
     networks:
      - ci-network
@@ -44,14 +44,14 @@ services:
       AUTH_TYPE: LDAP
       LDAP_SERVER: ${LDAP_URI}
       LDAP_ACCOUNTBASE: ${LDAP_ROOTDN}
-      #LDAP_GROUPBASE: ou=groups,dc=example,dc=com
+      LDAP_GROUPBASE: ${LDAP_GROUP_BASEDN}
       INITIAL_ADMIN_USER: ${CI_INIT_ADMIN}
       INITIAL_ADMIN_PASSWORD: ${CI_INIT_PASSWORD}
       GERRIT_INIT_ARGS: --install-plugin=download-commands
       JENKINS_HOST: jenkins
   jenkins:
     restart: unless-stopped
-    image: openfrontier/jenkins:alpine
+    image: openfrontier/jenkins:${JENKINS_VERSION}
     networks:
      - ci-network
     ports:
