@@ -68,7 +68,7 @@ services:
       GERRIT_HOST_NAME: gerrit
       GERRIT_FRONT_END_URL: http://${PROXY_HOST}/gerrit
       JENKINS_OPTS: --prefix=/jenkins
-      ROOT_RUL: http://${PROXY_HOST}/jenkins
+      ROOT_URL: http://${PROXY_HOST}/jenkins
   proxy:
     restart: unless-stopped
     image: openfrontier/nginx
