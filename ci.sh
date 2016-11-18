@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-source ./config
+source ./env.config
 
 docker-compose ${COMPOSE_OPT} $@
