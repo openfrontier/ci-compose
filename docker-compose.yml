@@ -118,3 +118,19 @@ services:
       CONTEXT_PATH: /nexus
     volumes:
      - nexus-volume:/sonatype-work
+  ldap-ssp:
+    image: openfrontier/ldap-ssp
+    restart: unless-stopped
+    networks:
+     - ci-network
+    ports:
+     - "80"
+    environment:
+      LDAP_URL: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_ROOTDN}
+      LDAP_BINDDN: ${LDAP_ADMIN}
+      LDAP_BINDPW: ${LDAP_PWD}
+      SMTP_HOST: ${SMTP_SERVER}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      MAIL_FROM: ${SMTP_EMAIL}
