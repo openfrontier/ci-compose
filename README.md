@@ -8,7 +8,7 @@
 
 - PROXY_HOST the fqdn/ip of proxy
 - LDAP_URI the fqdn/ip of ldap server
-- LDAP_ROOTDN the ldap searching base DN of your ldap server
+- LDAP_USER_BASEDN the ldap searching base DN of your ldap server
 - CI_INIT_ADMIN/CI_INIT_PASSWORD administrator's uid and password for Gerrit and Jenkins which must be existed in your OpenLDAP server.
 
 # Quickstart Instructions

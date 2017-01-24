@@ -8,7 +8,7 @@ volumes:
   nexus-volume:
 services:
   pg-gerrit:
-    image: postgres
+    image: postgres:${POSTGRES_VERSION}
     restart: unless-stopped
     networks:
      - ci-network
@@ -43,7 +43,7 @@ services:
       DB_ENV_POSTGRES_PASSWORD: gerrit
       AUTH_TYPE: ${AUTH_TYPE}
       LDAP_SERVER: ${LDAP_URI}
-      LDAP_ACCOUNTBASE: ${LDAP_ROOTDN}
+      LDAP_ACCOUNTBASE: ${LDAP_USER_BASEDN}
       LDAP_GROUPBASE: ${LDAP_GROUP_BASEDN}
       INITIAL_ADMIN_USER: ${CI_INIT_ADMIN}
       INITIAL_ADMIN_PASSWORD: ${CI_INIT_PASSWORD}
@@ -62,7 +62,7 @@ services:
     environment:
       JAVA_OPTS: "-Duser.timezone=Asia/Shanghai -Djenkins.install.runSetupWizard=false"
       LDAP_SERVER: ${LDAP_URI}
-      LDAP_ROOTDN: ${LDAP_ROOTDN}
+      LDAP_ROOTDN: ${LDAP_USER_BASEDN}
       LDAP_INHIBIT_INFER_ROOTDN: 'false'
       LDAP_DISABLE_MAIL_ADDRESS_RESOLVER: 'false'
       GERRIT_HOST_NAME: gerrit
@@ -71,7 +71,7 @@ services:
       ROOT_URL: http://${PROXY_HOST}/jenkins
   proxy:
     restart: unless-stopped
-    image: openfrontier/nginx
+    image: openfrontier/nginx:${NGINX_VERSION}
     networks:
      - ci-network
     ports:
@@ -86,7 +86,7 @@ services:
       CLIENT_MAX_BODY_SIZE: 200m
   haproxy:
     restart: unless-stopped
-    image: openfrontier/haproxy
+    image: openfrontier/haproxy:${HAPROXY_VERSION}
     networks:
      - ci-network
     ports:
@@ -98,7 +98,7 @@ services:
       GERRIT_HOST: gerrit
   jenkins-agent:
     restart: unless-stopped
-    image: openfrontier/jenkins-swarm-maven-slave
+    image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     networks:
      - ci-network
     depends_on:
@@ -109,7 +109,7 @@ services:
     command: -master http://jenkins:8080/jenkins/ -labels ${JENKINS_AGENT_LABEL} -mode exclusive -username ${CI_INIT_ADMIN} -password ${CI_INIT_PASSWORD} -executors 1
   nexus:
     restart: unless-stopped
-    image: openfrontier/nexus
+    image: openfrontier/nexus:${NEXUS_VERSION}
     networks:
      - ci-network
     ports:
@@ -119,7 +119,7 @@ services:
     volumes:
      - nexus-volume:/sonatype-work
   ldap-ssp:
-    image: openfrontier/ldap-ssp
+    image: openfrontier/ldap-ssp:${SSP_VERSION}
     restart: unless-stopped
     networks:
      - ci-network
@@ -127,7 +127,7 @@ services:
      - "80"
     environment:
       LDAP_URL: ${LDAP_URI}
-      LDAP_BASE: ${LDAP_ROOTDN}
+      LDAP_BASE: ${LDAP_USER_BASEDN}
       LDAP_BINDDN: ${LDAP_ADMIN}
       LDAP_BINDPW: ${LDAP_PWD}
       SMTP_HOST: ${SMTP_SERVER}
