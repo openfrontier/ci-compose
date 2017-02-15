@@ -7,7 +7,7 @@ volumes:
   lam-config-volume:
 services:
   openldap:
-    image: openfrontier/openldap
+    image: openfrontier/openldap-server
     restart: unless-stopped
     networks:
      - ci-network
