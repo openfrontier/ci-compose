@@ -31,6 +31,7 @@ services:
     volumes:
      - lam-config-volume:/var/www/html/lam/config
     environment:
+      constraint:node: =${PROXY_NODE}
       LDAP_URL: ${LDAP_URI}
       LDAP_PORT: ${LDAP_PORT}
       LDAP_DN: ${LDAP_DOMAIN}
