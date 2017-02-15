@@ -19,6 +19,8 @@ services:
     environment:
       SLAPD_PASSWORD: ${LDAP_PWD}
       SLAPD_DOMAIN: ${LDAP_DOMAIN}
+      SLAPD_ADDITIONAL_SCHEMAS: ppolicy
+      SLAPD_ADDITIONAL_MODULES: ppolicy
   lam:
     image: openfrontier/lam:${LAM_VERSION}
     restart: unless-stopped
