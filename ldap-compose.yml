@@ -9,6 +9,8 @@ services:
   openldap:
     image: openfrontier/openldap-server
     restart: unless-stopped
+    logging:
+      driver: "journald"
     networks:
      - ci-network
     ports:
@@ -24,6 +26,8 @@ services:
   lam:
     image: openfrontier/lam:${LAM_VERSION}
     restart: unless-stopped
+    logging:
+      driver: "journald"
     networks:
      - ci-network
     ports:
