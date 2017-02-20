@@ -54,6 +54,7 @@ services:
       INITIAL_ADMIN_PASSWORD: ${CI_INIT_PASSWORD}
       GERRIT_INIT_ARGS: --install-plugin=download-commands
       JENKINS_HOST: jenkins
+      GITWEB_TYPE: ${GITWEB_TYPE}
   jenkins:
     image: openfrontier/jenkins:${JENKINS_VERSION}
     restart: unless-stopped
