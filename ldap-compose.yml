@@ -23,6 +23,7 @@ services:
       SLAPD_DOMAIN: ${LDAP_DOMAIN}
       SLAPD_ADDITIONAL_SCHEMAS: ppolicy
       SLAPD_ADDITIONAL_MODULES: ppolicy
+      DEBUG_LEVEL: 256
   lam:
     image: openfrontier/lam:${LAM_VERSION}
     restart: unless-stopped
