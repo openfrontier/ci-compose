@@ -3,9 +3,12 @@ networks:
   ci-network:
 volumes:
   pg-gerrit-volume:
+  pg-redmine-volume:
   gerrit-volume:
   jenkins-volume:
   nexus-volume:
+  redmine-data-volume:
+  redmine-log-volume:
 services:
   pg-gerrit:
     image: postgres:${POSTGRES_VERSION}
@@ -90,6 +93,7 @@ services:
      - "gerrit"
      - "jenkins"
      - "nexus"
+     - "redmine"
     environment:
       constraint:node: =${PROXY_NODE}
       SERVER_NAME: ${PROXY_HOST}
@@ -152,3 +156,46 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
       MAIL_FROM: ${SMTP_EMAIL}
+  pg-redmine:
+    image: postgres:${POSTGRES_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-redmine-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: redmine
+      POSTGRES_DB: redmine
+  redmine:
+    image: sameersbn/redmine:${REDMINE_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "80"
+    volumes:
+     - redmine-log-volume:/var/log/redmine
+     - redmine-data-volume:/home/redmine/data
+    depends_on:
+     - "pg-redmine"
+    environment:
+      DB_ADAPTER: postgresql
+      DB_HOST: pg-redmine
+      DB_NAME: redmine
+      DB_USER: redmine
+      DB_PASS: redmine
+      REDMINE_RELATIVE_URL_ROOT: /redmine
+      REDMINE_FETCH_COMMITS: hourly
+      SMTP_DOMAIN: ${LDAP_DOMAIN}
+      SMTP_HOST: ${SMTP_SERVER}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      NGINX_MAX_UPLOAD_SIZE: 200m
