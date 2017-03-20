@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 networks:
   ci-network:
 volumes:
@@ -8,7 +8,9 @@ volumes:
 services:
   openldap:
     image: openfrontier/openldap-server
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: none
     logging:
       driver: "journald"
     networks:
@@ -26,7 +28,9 @@ services:
       DEBUG_LEVEL: 256
   lam:
     image: openfrontier/lam:${LAM_VERSION}
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: none
     logging:
       driver: "journald"
     networks:

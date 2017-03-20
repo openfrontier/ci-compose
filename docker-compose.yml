@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 networks:
   ci-network:
 volumes:
@@ -55,7 +55,7 @@ services:
       LDAP_ACCOUNTFULLNAME: ${LDAP_ACCOUNTFULLNAME}
       INITIAL_ADMIN_USER: ${CI_INIT_ADMIN}
       INITIAL_ADMIN_PASSWORD: ${CI_INIT_PASSWORD}
-      GERRIT_INIT_ARGS: --install-plugin=download-commands
+      GERRIT_INIT_ARGS: --install-plugin=download-commands --install-plugin=replication
       JENKINS_HOST: jenkins
       GITWEB_TYPE: ${GITWEB_TYPE}
   jenkins:
