@@ -13,7 +13,7 @@ services:
     image: openfrontier/openldap-server
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -33,7 +33,7 @@ services:
     image: openfrontier/lam:${LAM_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:

@@ -29,7 +29,8 @@ services:
     image: postgres:${POSTGRES_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
+      mode: global
     logging:
       driver: "journald"
     networks:
@@ -46,7 +47,7 @@ services:
     image: openfrontier/gerrit-ci:${GERRIT_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -81,7 +82,7 @@ services:
     image: openfrontier/jenkins:${JENKINS_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -105,7 +106,7 @@ services:
     image: openfrontier/nginx:${NGINX_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -125,7 +126,7 @@ services:
     image: openfrontier/haproxy:${HAPROXY_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -141,7 +142,7 @@ services:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -169,7 +170,7 @@ services:
     image: openfrontier/ldap-ssp:${SSP_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -189,7 +190,7 @@ services:
     image: postgres:${POSTGRES_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
@@ -206,7 +207,7 @@ services:
     image: sameersbn/redmine:${REDMINE_VERSION}
     deploy:
       restart_policy:
-        condition: none
+        condition: on-failure
     logging:
       driver: "journald"
     networks:
