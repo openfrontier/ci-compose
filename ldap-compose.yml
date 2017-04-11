@@ -14,6 +14,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -34,6 +37,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:

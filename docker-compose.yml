@@ -30,7 +30,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-      mode: global
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -48,6 +50,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -83,6 +88,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -107,6 +115,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -119,7 +130,6 @@ services:
      - "nexus"
      - "redmine"
     environment:
-      constraint:node: =${PROXY_NODE}
       SERVER_NAME: ${PROXY_HOST}
       CLIENT_MAX_BODY_SIZE: 200m
   haproxy:
@@ -127,6 +137,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -136,13 +149,15 @@ services:
     depends_on:
      - "gerrit"
     environment:
-      constraint:node: =${PROXY_NODE}
       GERRIT_HOST: gerrit
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -155,7 +170,12 @@ services:
     command: -master http://jenkins:8080/jenkins/ -labels ${JENKINS_AGENT_LABEL} -mode exclusive -username ${CI_INIT_ADMIN} -password ${CI_INIT_PASSWORD} -executors 1
   nexus:
     image: openfrontier/nexus:${NEXUS_VERSION}
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -171,6 +191,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -191,6 +214,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
@@ -208,6 +234,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
     logging:
       driver: "journald"
     networks:
