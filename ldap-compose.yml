@@ -3,8 +3,11 @@ networks:
   ci-network:
 volumes:
   openldap-etc-volume:
+    driver: "${VOLUME_DRIVER}"
   openldap-repo-volume:
+    driver: "${VOLUME_DRIVER}"
   lam-config-volume:
+    driver: "${VOLUME_DRIVER}"
 services:
   openldap:
     image: openfrontier/openldap-server
