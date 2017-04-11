@@ -3,6 +3,9 @@
 # Prerequest
 
 - A working OpenLDAP server ( Optional )
+- A working ceph and rbd-docker-plugin ( Optional )
+  You must change VOLUME_DRIVER to local if rbd-docker-plugin isn't available.
+- A docker swarm cluster
 
 # Required environment variables
 
@@ -14,19 +17,12 @@
 # Quickstart Instructions
 
 1. Specify required variables in the **env.config** file.
-1. Run: `./ci.sh -f ldap-compose.yml up -d`
+1. Run: `./stack.sh deploy -c ldap-compose.yml demo`
 1. Access http://PROXY_HOST:LAM_PORT/lam/ and login with password specified in **LDAP_PWD**.
 1. Create or import the admin entry according to **CI_INIT_ADMIN** and **CI_INIT_PASSWORD**.
-1. Run: `./ci.sh -f ldap-compose.yml -f docker-compose.yml up -d`
+1. Run: `./stack.sh deploy -c docker-compose.yml demo`
 1. Access http://PROXY_HOST in your browser.
-
-# General Getting Started Instructions
-
-## To run with Docker Swarm
-
-1. Specify **PROXY_NODE** to the docker node name on your **PROXY_HOST**.
-1. Specify **DOCKER_SWARM_URI** to the URI of your swarm manager node.
 
 # Scale up Jenkins Swarm Agent nodes
 
-- Run: ./ci.sh scale jenkins-agent=2
+- Run: docker service scale demo-jenkins-agent=2
