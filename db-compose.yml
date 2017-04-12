@@ -1,0 +1,49 @@
+version: '3'
+networks:
+  ci-network:
+volumes:
+  pg-gerrit-volume:
+    driver: "${VOLUME_DRIVER}"
+  pg-redmine-volume:
+    driver: "${VOLUME_DRIVER}"
+services:
+  pg-gerrit:
+    image: postgres:${POSTGRES_VERSION}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-gerrit-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: gerrit2
+      POSTGRES_PASSWORD: gerrit
+      POSTGRES_DB: reviewdb
+  pg-redmine:
+    image: postgres:${POSTGRES_VERSION}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-redmine-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: redmine
+      POSTGRES_DB: redmine

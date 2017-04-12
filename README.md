@@ -20,9 +20,11 @@
 1. Run: `./stack.sh deploy -c ldap-compose.yml demo`
 1. Access http://PROXY_HOST:LAM_PORT/lam/ and login with password specified in **LDAP_PWD**.
 1. Create or import the admin entry according to **CI_INIT_ADMIN** and **CI_INIT_PASSWORD**.
-1. Run: `./stack.sh deploy -c docker-compose.yml demo`
+1. Run: `./stack.sh deploy -c db-compose.yml demo`
+1. Run: `./stack.sh deploy -c ci-compose.yml demo`
+1. Run: `./stack.sh deploy -c proxy-compose.yml demo`
 1. Access http://PROXY_HOST in your browser.
 
 # Scale up Jenkins Swarm Agent nodes
 
-- Run: docker service scale demo-jenkins-agent=2
+- Run: docker service scale demo_jenkins-agent=2

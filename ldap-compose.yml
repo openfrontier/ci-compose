@@ -55,3 +55,26 @@ services:
       LDAP_DN: ${LDAP_DOMAIN}
       USER_DN: ${LDAP_USER_BASEDN}
       GROUP_DN: ${LDAP_GROUP_BASEDN}
+  ldap-ssp:
+    image: openfrontier/ldap-ssp:${SSP_VERSION}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "80"
+    environment:
+      LDAP_URL: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_USER_BASEDN}
+      LDAP_BINDDN: ${LDAP_ADMIN}
+      LDAP_BINDPW: ${LDAP_PWD}
+      SMTP_HOST: ${SMTP_SERVER}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      MAIL_FROM: ${SMTP_EMAIL}

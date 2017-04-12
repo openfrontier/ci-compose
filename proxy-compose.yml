@@ -1,0 +1,44 @@
+version: '3'
+networks:
+  ci-network:
+services:
+  proxy:
+    image: openfrontier/nginx:${NGINX_VERSION}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "80:80"
+    depends_on:
+     - "gerrit"
+     - "jenkins"
+     - "nexus"
+     - "redmine"
+    environment:
+      SERVER_NAME: ${PROXY_HOST}
+      CLIENT_MAX_BODY_SIZE: 200m
+  haproxy:
+    image: openfrontier/haproxy:${HAPROXY_VERSION}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "29418:29418"
+    depends_on:
+     - "gerrit"
+    environment:
+      GERRIT_HOST: gerrit
