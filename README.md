@@ -28,3 +28,9 @@
 # Scale up Jenkins Swarm Agent nodes
 
 - Run: docker service scale demo_jenkins-agent=2
+
+# Import demo projects
+
+  cd demo
+  ./import-demo.sh
+
