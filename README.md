@@ -31,3 +31,9 @@
 # Scale up Jenkins Swarm Agent nodes
 
 - Run: ./ci.sh scale jenkins-agent=2
+
+# Import demo projects
+
+  cd demo
+  ./import-demo.sh
+
