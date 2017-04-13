@@ -1,0 +1,26 @@
+version: '3'
+networks:
+  ci-network:
+volumes:
+  smtp-relay-volume:
+    driver: "${VOLUME_DRIVER}"
+services:
+  smtp-relay:
+    image: turgon37/smtp-relay
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 10
+        window: 2m
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "25:25"
+    volumes:
+     - smtp-relay-volume:/data
+    environment:
+      RELAY_MYDOMAIN: ${RELAY_MYDOMAIN}
+      RELAY_HOST: ${RELAY_HOST}

@@ -56,6 +56,10 @@ services:
       LDAP_ACCOUNTFULLNAME: ${LDAP_ACCOUNTFULLNAME}
       INITIAL_ADMIN_USER: ${CI_INIT_ADMIN}
       INITIAL_ADMIN_PASSWORD: ${CI_INIT_PASSWORD}
+      SMTP_SERVER: ${SMTP_SERVER}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      USER_EMAIL: ${SMTP_EMAIL}
       GERRIT_INIT_ARGS: --install-plugin=download-commands --install-plugin=replication
       JENKINS_HOST: jenkins
       GITWEB_TYPE: ${GITWEB_TYPE}
