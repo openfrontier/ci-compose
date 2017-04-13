@@ -9,7 +9,7 @@
 - **PROXY_HOST** the fqdn/ip of proxy
 - **LDAP_URI** the fqdn/ip of ldap server ( Optional )
 - **LDAP_USER_BASEDN** the ldap searching base DN of your ldap server
-- **CI_INIT_ADMIN/CI_INIT_PASSWORD** administrator's uid and password for Gerrit and Jenkins which must be existed in your OpenLDAP server.
+- **CI_INIT_ADMIN/CI_INIT_PASSWORD/CI_INIT_EMAIL** administrator's uid/password/email for Gerrit and Jenkins which must be existed in your OpenLDAP server.
 - **VOLUME_DRIVER** must be changed to "local" if rbd-docker-plugin is unavailable.
 
 # Quickstart Instructions
@@ -17,7 +17,7 @@
 1. Specify required variables in the **env.config** file.
 1. Run: `./ci.sh -f ldap-compose.yml up -d`
 1. Access http://PROXY_HOST:LAM_PORT/lam/ and login with password specified in **LDAP_PWD**.
-1. Create or import the admin entry according to **CI_INIT_ADMIN** and **CI_INIT_PASSWORD**.
+1. Create or import the admin entry according to **CI_INIT_ADMIN** and **CI_INIT_PASSWORD** and **CI_INIT_EMAIL**.
 1. Run: `./ci.sh -f ldap-compose.yml -f docker-compose.yml up -d`
 1. Access http://PROXY_HOST in your browser.
 
