@@ -171,6 +171,7 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
       MAIL_FROM: ${SMTP_EMAIL}
+      NOTIFY_ON_CHANGE: ${NOTIFY_ON_CHANGE}
   pg-redmine:
     image: postgres:${POSTGRES_VERSION}
     restart: on-failure:10
