@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 networks:
   ci-network:
 volumes:
@@ -7,12 +7,7 @@ volumes:
 services:
   smtp-relay:
     image: turgon37/smtp-relay
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 10
-        window: 2m
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
