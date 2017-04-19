@@ -28,11 +28,19 @@
 1. Specify **PROXY_NODE** to the docker node name on your **PROXY_HOST**.
 1. Specify **DOCKER_SWARM_URI** to the URI of your swarm manager node.
 
-# Scale up Jenkins Swarm Agent nodes
+## Start up a smtp relay service
+
+1. Specify **RELAY_MYDOMAIN** and **RELAY_HOST** in env.config for smtp-relay service.
+1. Run: `./ci.sh -f mail-compose.yml up -d`
+1. Run: ` ./ci.sh -f mail-compose.yml exec smtp-relay /bin/sh` to get into the container.
+1. Exec: `/saslpasswd.sh -u example.com -c admin` then `exit` container.
+1. Specify **Email* section in env.config and set NOTIFY_ON_CHANGE=true for ldap-ssp.
+
+## Scale up Jenkins Swarm Agent nodes
 
 - Run: ./ci.sh scale jenkins-agent=2
 
-# Import demo projects
+## Import demo projects
 
   cd demo
   ./import-demo.sh
