@@ -10,6 +10,7 @@
 - **LDAP_URI** the fqdn/ip of ldap server ( Optional )
 - **LDAP_USER_BASEDN** the ldap searching base DN of your ldap server
 - **CI_INIT_ADMIN/CI_INIT_PASSWORD** administrator's uid and password for Gerrit and Jenkins which must be existed in your OpenLDAP server.
+- **VOLUME_DRIVER** must be changed to "local" if rbd-docker-plugin is unavailable.
 
 # Quickstart Instructions
 

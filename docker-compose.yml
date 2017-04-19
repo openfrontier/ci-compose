@@ -3,27 +3,27 @@ networks:
   ci-network:
 volumes:
   pg-gerrit-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
   pg-redmine-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
   gerrit-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
     driver_opts:
       size: 51200
   jenkins-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
     driver_opts:
       size: 204800
   nexus-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
     driver_opts:
       size: 102400
   redmine-data-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
     driver_opts:
       size: 51200
   redmine-log-volume:
-    driver: "rbd"
+    driver: "${VOLUME_DRIVER}"
 services:
   pg-gerrit:
     image: postgres:${POSTGRES_VERSION}
