@@ -19,6 +19,7 @@ services:
      - openldap-etc-volume:/etc/ldap
      - openldap-repo-volume:/var/lib/ldap
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       SLAPD_PASSWORD: ${LDAP_PWD}
       SLAPD_DOMAIN: ${LDAP_DOMAIN}
       SLAPD_ADDITIONAL_SCHEMAS: ppolicy
@@ -36,7 +37,7 @@ services:
     volumes:
      - lam-config-volume:/var/www/html/lam/config
     environment:
-      constraint:node: =${PROXY_NODE}
+      constraint:volume.driver: =${VOLUME_DRIVER}
       LDAP_URL: ${LDAP_URI}
       LDAP_PORT: ${LDAP_PORT}
       LDAP_DN: ${LDAP_DOMAIN}

@@ -37,6 +37,7 @@ services:
     volumes:
      - pg-gerrit-volume:/var/lib/postgresql/data
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       POSTGRES_USER: gerrit2
       POSTGRES_PASSWORD: gerrit
       POSTGRES_DB: reviewdb
@@ -55,6 +56,7 @@ services:
     depends_on:
      - "pg-gerrit"
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       WEBURL: http://${PROXY_HOST}/gerrit
       HTTPD_LISTENURL: proxy-http://*:8080/gerrit
       DATABASE_TYPE: postgresql
@@ -86,6 +88,7 @@ services:
     volumes:
      - jenkins-volume:/var/jenkins_home
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       JAVA_OPTS: "-Duser.timezone=Asia/Shanghai -Djenkins.install.runSetupWizard=false"
       LDAP_SERVER: ${LDAP_URI}
       LDAP_ROOTDN: ${LDAP_USER_BASEDN}
@@ -150,6 +153,7 @@ services:
     ports:
      - "8081"
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       CONTEXT_PATH: /nexus
     volumes:
      - nexus-volume:/sonatype-work
@@ -192,6 +196,7 @@ services:
     volumes:
      - pg-redmine-volume:/var/lib/postgresql/data
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       POSTGRES_USER: redmine
       POSTGRES_PASSWORD: redmine
       POSTGRES_DB: redmine
@@ -210,6 +215,7 @@ services:
     depends_on:
      - "pg-redmine"
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       DB_ADAPTER: postgresql
       DB_HOST: pg-redmine
       DB_NAME: redmine
