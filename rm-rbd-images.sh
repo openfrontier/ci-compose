@@ -1,8 +1,9 @@
 #!/bin/bash
-rbd rm demo_gerrit-volume
-rbd rm demo_jenkins-volume
-rbd rm demo_pg-gerrit-volume
-rbd rm demo_pg-redmine-volume
-rbd rm demo_redmine-data-volume
-rbd rm demo_redmine-log-volume
-#rbd rm demo_nexus-volume
+PROJECT_NAME=${demo:-$1}
+rbd rm ${PROJECT_NAME}_gerrit-volume
+rbd rm ${PROJECT_NAME}_jenkins-volume
+rbd rm ${PROJECT_NAME}_pg-gerrit-volume
+rbd rm ${PROJECT_NAME}_pg-redmine-volume
+rbd rm ${PROJECT_NAME}_redmine-data-volume
+rbd rm ${PROJECT_NAME}_redmine-log-volume
+#rbd rm ${PROJECT_NAME}_nexus-volume
