@@ -22,5 +22,6 @@ services:
     volumes:
      - smtp-relay-volume:/data
     environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
       RELAY_MYDOMAIN: ${RELAY_MYDOMAIN}
       RELAY_HOST: ${RELAY_HOST}
