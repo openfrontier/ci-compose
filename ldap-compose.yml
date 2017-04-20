@@ -17,7 +17,7 @@ services:
     networks:
      - ci-network
     ports:
-     - "389:389"
+     - "389"
     volumes:
      - openldap-etc-volume:/etc/ldap
      - openldap-repo-volume:/var/lib/ldap
