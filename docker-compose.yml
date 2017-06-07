@@ -8,20 +8,12 @@ volumes:
     driver: "${VOLUME_DRIVER}"
   gerrit-volume:
     driver: "${VOLUME_DRIVER}"
-    driver_opts:
-      size: 51200
   jenkins-volume:
     driver: "${VOLUME_DRIVER}"
-    driver_opts:
-      size: 204800
   nexus-volume:
     driver: "${VOLUME_DRIVER}"
-    driver_opts:
-      size: 102400
   redmine-data-volume:
     driver: "${VOLUME_DRIVER}"
-    driver_opts:
-      size: 51200
   redmine-log-volume:
     driver: "${VOLUME_DRIVER}"
 services:
