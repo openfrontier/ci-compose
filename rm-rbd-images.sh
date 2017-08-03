@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECT_NAME=${demo:-$1}
+PROJECT_NAME=${1:-demo}
 rbd rm ${PROJECT_NAME}_gerrit-volume
 rbd rm ${PROJECT_NAME}_jenkins-volume
 rbd rm ${PROJECT_NAME}_pg-gerrit-volume
