@@ -85,7 +85,7 @@ services:
      - ci-network
     ports:
      - "8080"
-     - "50000:50000"
+     - "50000"
     volumes:
      - jenkins-volume:/var/jenkins_home
     environment:
@@ -132,7 +132,7 @@ services:
     environment:
       constraint:node: =${PROXY_NODE}
       GERRIT_HOST: gerrit
-      OPENLDAP_HOST: openldap
+      OPENLDAP_HOST: ${OPENLDAP_HOST}
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     restart: on-failure:10
