@@ -36,7 +36,7 @@ services:
     networks:
      - ldap-network
     ports:
-     - "${LAM_PORT}:80"
+     - "80"
     volumes:
      - lam-config-volume:/var/www/html/lam/config
     environment:
@@ -46,7 +46,7 @@ services:
       LDAP_DN: ${LDAP_DOMAIN}
       USER_DN: ${LDAP_USER_BASEDN}
       GROUP_DN: ${LDAP_GROUP_BASEDN}
-  haproxy:
+  ldap-haproxy:
     image: openfrontier/haproxy:${HAPROXY_VERSION}
     restart: unless-stopped
     logging:
@@ -60,7 +60,7 @@ services:
     environment:
       constraint:node: =${PROXY_NODE}
       OPENLDAP_HOST: openldap
-  proxy:
+  ldap-proxy:
     image: qiuranke/docker-nginx-lam
     restart: unless-stopped
     logging:
