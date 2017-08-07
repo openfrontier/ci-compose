@@ -60,3 +60,19 @@ services:
     environment:
       constraint:node: =${PROXY_NODE}
       OPENLDAP_HOST: openldap
+  proxy:
+    image: qiuranke/docker-nginx-lam
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ldap-network
+    ports:
+     - "80:80"
+    depends_on:
+     - "lam"
+    environment:
+      constraint:node: =${PROXY_NODE}
+      SERVER_NAME: ${PROXY_HOST}
+      CLIENT_MAX_BODY_SIZE: 200m
+      LAM_HOST: lam
