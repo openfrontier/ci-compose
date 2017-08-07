@@ -4,6 +4,9 @@ networks:
   ldap-network:
     external:
       name: ${LDAP_NETWORK}
+  mail-network:
+    external:
+      name: ${MAIL_NETWORK}
 volumes:
   pg-gerrit-volume:
     driver: "${VOLUME_DRIVER}"
@@ -44,6 +47,9 @@ services:
     networks:
       ci-network:
       ldap-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
+      mail-network:
         aliases:
          - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
@@ -177,6 +183,9 @@ services:
       ldap-network:
         aliases:
          - gerrit-${COMPOSE_PROJECT_NAME}
+      mail-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "80"
     environment:
@@ -221,6 +230,9 @@ services:
     networks:
       ci-network:
       ldap-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
+      mail-network:
         aliases:
          - gerrit-${COMPOSE_PROJECT_NAME}
     ports:

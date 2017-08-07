@@ -1,6 +1,6 @@
 version: '2.1'
 networks:
-  ci-network:
+  mail-network:
 volumes:
   smtp-relay-volume:
     driver: "${VOLUME_DRIVER}"
@@ -11,7 +11,7 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+     - mail-network
     ports:
      - "25"
     volumes:
