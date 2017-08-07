@@ -135,13 +135,11 @@ services:
      - ci-network
     ports:
      - "29418:29418"
-     - "389:389"
     depends_on:
      - "gerrit"
     environment:
       constraint:node: =${PROXY_NODE}
       GERRIT_HOST: gerrit
-      OPENLDAP_HOST: ${OPENLDAP_HOST}
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     restart: on-failure:10
