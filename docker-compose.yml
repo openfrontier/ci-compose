@@ -1,6 +1,9 @@
 version: '2.1'
 networks:
   ci-network:
+  ldap-network:
+    external:
+      name: ${LDAP_NETWORK}
 volumes:
   pg-gerrit-volume:
     driver: "${VOLUME_DRIVER}"
@@ -39,7 +42,10 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+      ci-network:
+      ldap-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "8080"
      - "29418"
@@ -82,7 +88,10 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+      ci-network:
+      ldap-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "8080"
      - "50000"
@@ -166,7 +175,10 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+      ci-network:
+      ldap-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "80"
     environment:
@@ -209,7 +221,10 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+      ci-network:
+      ldap-network:
+        aliases:
+         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "80"
     volumes:
