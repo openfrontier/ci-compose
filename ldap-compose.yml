@@ -46,3 +46,17 @@ services:
       LDAP_DN: ${LDAP_DOMAIN}
       USER_DN: ${LDAP_USER_BASEDN}
       GROUP_DN: ${LDAP_GROUP_BASEDN}
+  haproxy:
+    image: openfrontier/haproxy:${HAPROXY_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "389:389"
+    depends_on:
+     - "openldap"
+    environment:
+      constraint:node: =${PROXY_NODE}
+      OPENLDAP_HOST: openldap
