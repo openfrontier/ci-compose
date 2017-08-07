@@ -1,6 +1,6 @@
 version: '2.1'
 networks:
-  ci-network:
+  ldap-network:
 volumes:
   openldap-etc-volume:
     driver: "${VOLUME_DRIVER}"
@@ -15,7 +15,7 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+     - ldap-network
     ports:
      - "389"
     volumes:
@@ -34,7 +34,7 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+     - ldap-network
     ports:
      - "${LAM_PORT}:80"
     volumes:
@@ -52,7 +52,7 @@ services:
     logging:
       driver: "journald"
     networks:
-     - ci-network
+     - ldap-network
     ports:
      - "389:389"
     depends_on:
