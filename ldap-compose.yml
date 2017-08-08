@@ -8,6 +8,8 @@ volumes:
     driver: "${VOLUME_DRIVER}"
   lam-config-volume:
     driver: "${VOLUME_DRIVER}"
+  smtp-relay-volume:
+    driver: "${VOLUME_DRIVER}"
 services:
   openldap:
     image: openfrontier/openldap-server
@@ -73,8 +75,23 @@ services:
       PWD_MIN_DIGIT: ${PWD_MIN_DIGIT}
       PWD_MIN_SPECIAL: ${PWD_MIN_SPECIAL}
       PWD_SPECIAL_CHARS: ${PWD_SPECIAL_CHARS}
+  smtp-relay:
+    image: turgon37/smtp-relay
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ldap-network
+    ports:
+     - "25"
+    volumes:
+     - smtp-relay-volume:/data
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      RELAY_MYDOMAIN: ${RELAY_MYDOMAIN}
+      RELAY_HOST: ${RELAY_HOST}
   ldap-haproxy:
-    image: openfrontier/haproxy:${HAPROXY_VERSION}
+    image: qiuranke/docker-haproxy
     restart: unless-stopped
     logging:
       driver: "journald"
@@ -82,11 +99,14 @@ services:
      - ldap-network
     ports:
      - "389:389"
+     - "25:25"
     depends_on:
      - "openldap"
+     - "smtp-relay"
     environment:
       constraint:node: =${PROXY_NODE}
       OPENLDAP_HOST: openldap
+      MAIL_HOST: smtp-relay
   ldap-proxy:
     image: qiuranke/docker-ldap-proxy
     restart: unless-stopped
