@@ -173,39 +173,6 @@ services:
       CONTEXT_PATH: /nexus
     volumes:
      - nexus-volume:/sonatype-work
-  ldap-ssp:
-    image: openfrontier/ldap-ssp:${SSP_VERSION}
-    restart: on-failure:10
-    logging:
-      driver: "journald"
-    networks:
-      ci-network:
-      ldap-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
-      mail-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
-    ports:
-     - "80"
-    environment:
-      LDAP_URL: ${LDAP_URI}
-      LDAP_BASE: ${LDAP_USER_BASEDN}
-      LDAP_BINDDN: ${LDAP_ADMIN}
-      LDAP_BINDPW: ${LDAP_PWD}
-      SMTP_HOST: ${SMTP_SERVER}
-      SMTP_USER: ${SMTP_USER}
-      SMTP_PASS: ${SMTP_PASS}
-      SMTP_AUTH: ${SMTP_AUTH}
-      MAIL_FROM: ${SMTP_EMAIL}
-      NOTIFY_ON_CHANGE: ${NOTIFY_ON_CHANGE}
-      PWD_MIN_LENGTH: ${PWD_MIN_LENGTH}
-      PWD_MAX_LENGTH: ${PWD_MAX_LENGTH}
-      PWD_MIN_LOWER: ${PWD_MIN_LOWER}
-      PWD_MIN_UPPER: ${PWD_MIN_UPPER}
-      PWD_MIN_DIGIT: ${PWD_MIN_DIGIT}
-      PWD_MIN_SPECIAL: ${PWD_MIN_SPECIAL}
-      PWD_SPECIAL_CHARS: ${PWD_SPECIAL_CHARS}
   pg-redmine:
     image: postgres:${POSTGRES_VERSION}
     restart: on-failure:10
