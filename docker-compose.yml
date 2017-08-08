@@ -1,9 +1,6 @@
 version: '2.1'
 networks:
   ci-network:
-  ldap-network:
-    external:
-      name: ${LDAP_NETWORK}
   mail-network:
     external:
       name: ${MAIL_NETWORK}
@@ -46,9 +43,6 @@ services:
       driver: "journald"
     networks:
       ci-network:
-      ldap-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
       mail-network:
         aliases:
          - gerrit-${COMPOSE_PROJECT_NAME}
@@ -95,9 +89,6 @@ services:
       driver: "journald"
     networks:
       ci-network:
-      ldap-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "8080"
      - "50000"
@@ -196,9 +187,6 @@ services:
       driver: "journald"
     networks:
       ci-network:
-      ldap-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
       mail-network:
         aliases:
          - gerrit-${COMPOSE_PROJECT_NAME}
