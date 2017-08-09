@@ -91,7 +91,7 @@ services:
       RELAY_MYDOMAIN: ${RELAY_MYDOMAIN}
       RELAY_HOST: ${RELAY_HOST}
   ldap-haproxy:
-    image: qiuranke/docker-haproxy
+    image: openfrontier/haproxy:${HAPROXY_VERSION}
     restart: unless-stopped
     logging:
       driver: "journald"
@@ -108,7 +108,7 @@ services:
       OPENLDAP_HOST: openldap
       MAIL_HOST: smtp-relay
   ldap-proxy:
-    image: qiuranke/docker-ldap-proxy
+    image: openfrontier/ldap-proxy
     restart: unless-stopped
     logging:
       driver: "journald"
