@@ -1,9 +1,6 @@
 version: '2.1'
 networks:
   ci-network:
-  mail-network:
-    external:
-      name: ${MAIL_NETWORK}
 volumes:
   pg-gerrit-volume:
     driver: "${VOLUME_DRIVER}"
@@ -43,9 +40,6 @@ services:
       driver: "journald"
     networks:
       ci-network:
-      mail-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "8080"
      - "29418"
@@ -187,9 +181,6 @@ services:
       driver: "journald"
     networks:
       ci-network:
-      mail-network:
-        aliases:
-         - gerrit-${COMPOSE_PROJECT_NAME}
     ports:
      - "80"
     volumes:
