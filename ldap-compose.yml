@@ -43,8 +43,8 @@ services:
      - lam-config-volume:/var/www/html/lam/config
     environment:
       constraint:volume.driver: =${VOLUME_DRIVER}
-      LDAP_URL: ${LDAP_URI}
-      LDAP_PORT: ${LDAP_PORT}
+      LDAP_URL: ldap://openldap
+      LDAP_PORT: 389
       LDAP_DN: ${LDAP_DOMAIN}
       USER_DN: ${LDAP_USER_BASEDN}
       GROUP_DN: ${LDAP_GROUP_BASEDN}
@@ -58,11 +58,11 @@ services:
     ports:
      - "80"
     environment:
-      LDAP_URL: ${LDAP_URI}
+      LDAP_URL: ldap://openldap
       LDAP_BASE: ${LDAP_USER_BASEDN}
       LDAP_BINDDN: ${LDAP_ADMIN}
       LDAP_BINDPW: ${LDAP_PWD}
-      SMTP_HOST: ${SMTP_SERVER}
+      SMTP_HOST: smtp-relay
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
       SMTP_AUTH: ${SMTP_AUTH}
@@ -104,7 +104,7 @@ services:
      - "openldap"
      - "smtp-relay"
     environment:
-      constraint:node: =${PROXY_NODE}
+      constraint:node: =${LDAP_PROXY_NODE}
       OPENLDAP_HOST: openldap
       MAIL_HOST: smtp-relay
   ldap-proxy:
@@ -120,8 +120,8 @@ services:
      - "lam"
      - "ssp"
     environment:
-      constraint:node: =${PROXY_NODE}
-      SERVER_NAME: ${PROXY_HOST}
+      constraint:node: =${LDAP_PROXY_NODE}
+      SERVER_NAME: ${LDAP_PROXY_HOST}
       CLIENT_MAX_BODY_SIZE: 200m
       LAM_HOST: lam
       SSP_HOST: ssp
