@@ -38,6 +38,8 @@ services:
     restart: on-failure:10
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
       ci-network:
     ports:
@@ -81,6 +83,8 @@ services:
     restart: on-failure:10
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
       ci-network:
     ports:
@@ -179,6 +183,8 @@ services:
     restart: on-failure:10
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
       ci-network:
     ports:
