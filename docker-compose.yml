@@ -1,6 +1,9 @@
 version: '2.1'
 networks:
   ci-network:
+  proxy-network:
+    external:
+      name: "${PROXY_NETWORK}"
 volumes:
   pg-gerrit-volume:
     driver: "${VOLUME_DRIVER}"
@@ -110,15 +113,16 @@ services:
       driver: "journald"
     networks:
      - ci-network
+     - proxy-network
     ports:
-     - "80:80"
+     - "80"
     depends_on:
      - "gerrit"
      - "jenkins"
      - "nexus"
      - "redmine"
     environment:
-      constraint:node: =${PROXY_NODE}
+      #constraint:node: =${PROXY_NODE}
       SERVER_NAME: ${PROXY_HOST}
       CLIENT_MAX_BODY_SIZE: 200m
   haproxy:
@@ -128,12 +132,13 @@ services:
       driver: "journald"
     networks:
      - ci-network
+     - proxy-network
     ports:
-     - "29418:29418"
+     - "29418"
     depends_on:
      - "gerrit"
     environment:
-      constraint:node: =${PROXY_NODE}
+      #constraint:node: =${PROXY_NODE}
       GERRIT_HOST: gerrit
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}

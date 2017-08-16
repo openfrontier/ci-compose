@@ -1,0 +1,18 @@
+version: '2.1'
+networks:
+  proxy-network:
+services:
+  proxy00:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - proxy-network
+    ports:
+     - "80"
+    environment:
+      constraint:node: =${PROXY_NODE}
+      CLIENT_MAX_BODY_SIZE: 200m
+    volumes:
+     - ./proxy.conf:/etc/nginx/conf.d/default.conf:ro
