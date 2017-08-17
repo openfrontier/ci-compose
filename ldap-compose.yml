@@ -1,6 +1,9 @@
 version: '2.1'
 networks:
   ldap-network:
+  proxy-network:
+    external:
+      name: "${PROXY_NETWORK}"
 volumes:
   openldap-etc-volume:
     driver: "${VOLUME_DRIVER}"
@@ -97,6 +100,7 @@ services:
       driver: "journald"
     networks:
      - ldap-network
+     - proxy-network
     ports:
      - "389:389"
      - "25:25"
@@ -114,13 +118,14 @@ services:
       driver: "journald"
     networks:
      - ldap-network
+     - proxy-network
     ports:
-     - "80:80"
+     - "80"
     depends_on:
      - "lam"
      - "ssp"
     environment:
-      constraint:node: =${LDAP_PROXY_NODE}
+      #constraint:node: =${LDAP_PROXY_NODE}
       SERVER_NAME: ${LDAP_PROXY_HOST}
       CLIENT_MAX_BODY_SIZE: 200m
       LAM_HOST: lam
