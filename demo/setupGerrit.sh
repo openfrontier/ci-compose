@@ -19,7 +19,7 @@ cat "${SSH_KEY_PATH}.pub" | curl --data @- --user "${CI_INIT_ADMIN}:${CI_INIT_PA
 #gather server rsa key
 ##TODO: This is not an elegant way.
 [ -f ~/.ssh/known_hosts ] && mv ~/.ssh/known_hosts ~/.ssh/known_hosts.bak
-ssh-keyscan -p 29418 -t rsa ${PROXY_HOST} > ~/.ssh/known_hosts
+ssh-keyscan -p ${GERRIT_SSH_PORT} -t rsa ${PROXY_HOST} > ~/.ssh/known_hosts
 
 #checkout project.config from All-Project.git
 [ -d ${CHECKOUT_DIR} ] && mv ${CHECKOUT_DIR}  ${CHECKOUT_DIR}.$$
@@ -35,7 +35,7 @@ ssh-add "${SSH_KEY_PATH}"
 #git config
 git config user.name  ${CI_INIT_ADMIN}
 git config user.email ${CI_INIT_EMAIL}
-git remote add origin ssh://${CI_INIT_ADMIN}@${PROXY_HOST}:29418/All-Projects
+git remote add origin ssh://${CI_INIT_ADMIN}@${PROXY_HOST}:${GERRIT_SSH_PORT}/All-Projects
 #checkout project.config
 git fetch -q origin refs/meta/config:refs/remotes/origin/meta/config
 git checkout meta/config

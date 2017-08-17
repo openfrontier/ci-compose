@@ -138,7 +138,7 @@ services:
     depends_on:
      - "gerrit"
     environment:
-      #constraint:node: =${PROXY_NODE}
+      constraint:node: =${PROXY_NODE}
       GERRIT_HOST: gerrit
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}

@@ -21,7 +21,7 @@ git config core.filemode false
 git config user.name  ${CI_INIT_ADMIN}
 git config user.email ${CI_INIT_EMAIL}
 git config push.default simple
-git remote add origin ssh://${CI_INIT_ADMIN}@${PROXY_HOST}:29418/demo-docker
+git remote add origin ssh://${CI_INIT_ADMIN}@${PROXY_HOST}:${GERRIT_SSH_PORT}/demo-docker
 git fetch -q origin
 git fetch -q origin refs/meta/config:refs/remotes/origin/meta/config
 
