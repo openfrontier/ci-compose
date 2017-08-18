@@ -22,7 +22,7 @@ volumes:
 services:
   pg-gerrit:
     image: postgres:${POSTGRES_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
@@ -38,7 +38,7 @@ services:
       POSTGRES_DB: reviewdb
   gerrit:
     image: openfrontier/gerrit-ci:${GERRIT_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     dns:
@@ -83,7 +83,7 @@ services:
       OAUTH_ALLOW_REGISTER_NEW_EMAIL: ${OAUTH_ALLOW_REGISTER_NEW_EMAIL}
   jenkins:
     image: openfrontier/jenkins:${JENKINS_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     dns:
@@ -108,7 +108,7 @@ services:
       ROOT_URL: http://${PROXY_HOST}/jenkins
   proxy:
     image: openfrontier/nginx:${NGINX_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
@@ -127,7 +127,7 @@ services:
       CLIENT_MAX_BODY_SIZE: 200m
   haproxy:
     image: openfrontier/haproxy:${HAPROXY_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
@@ -142,7 +142,7 @@ services:
       GERRIT_HOST: gerrit
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
@@ -155,7 +155,7 @@ services:
     command: -master http://jenkins:8080/jenkins/ -labels ${JENKINS_AGENT_LABEL} -mode exclusive -username ${CI_INIT_ADMIN} -password ${CI_INIT_PASSWORD} -executors 1
   nexus:
     image: openfrontier/nexus:${NEXUS_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
@@ -169,7 +169,7 @@ services:
      - nexus-volume:/sonatype-work
   pg-redmine:
     image: postgres:${POSTGRES_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
@@ -185,7 +185,7 @@ services:
       POSTGRES_DB: redmine
   redmine:
     image: sameersbn/redmine:${REDMINE_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     dns:

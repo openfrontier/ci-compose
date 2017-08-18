@@ -53,7 +53,7 @@ services:
       GROUP_DN: ${LDAP_GROUP_BASEDN}
   ssp:
     image: openfrontier/ldap-ssp:${SSP_VERSION}
-    restart: on-failure:10
+    restart: unless-stopped
     logging:
       driver: "journald"
     networks:
