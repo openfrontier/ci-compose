@@ -48,7 +48,8 @@ services:
       constraint:volume.driver: =${VOLUME_DRIVER}
       LDAP_URL: ldap://openldap
       LDAP_PORT: 389
-      LDAP_DN: ${LDAP_DOMAIN}
+      LDAP_ADMIN: ${LDAP_ADMIN}
+      SLAPD_DN: ${LDAP_BASEDN}
       USER_DN: ${LDAP_USER_BASEDN}
       GROUP_DN: ${LDAP_GROUP_BASEDN}
   ssp:
