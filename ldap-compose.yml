@@ -5,34 +5,11 @@ networks:
     external:
       name: "${PROXY_NETWORK}"
 volumes:
-  openldap-etc-volume:
-    driver: "${VOLUME_DRIVER}"
-  openldap-repo-volume:
-    driver: "${VOLUME_DRIVER}"
   lam-config-volume:
     driver: "${VOLUME_DRIVER}"
   smtp-relay-volume:
     driver: "${VOLUME_DRIVER}"
 services:
-  openldap:
-    image: openfrontier/openldap-server
-    restart: unless-stopped
-    logging:
-      driver: "journald"
-    networks:
-     - ldap-network
-    ports:
-     - "389"
-    volumes:
-     - openldap-etc-volume:/etc/ldap
-     - openldap-repo-volume:/var/lib/ldap
-    environment:
-      constraint:volume.driver: =${VOLUME_DRIVER}
-      SLAPD_PASSWORD: ${LDAP_PWD}
-      SLAPD_DOMAIN: ${LDAP_DOMAIN}
-      SLAPD_ADDITIONAL_SCHEMAS: ppolicy
-      SLAPD_ADDITIONAL_MODULES: ppolicy
-      DEBUG_LEVEL: 256
   lam:
     image: openfrontier/lam:${LAM_VERSION}
     restart: unless-stopped
@@ -46,7 +23,7 @@ services:
      - lam-config-volume:/var/www/html/lam/config
     environment:
       constraint:volume.driver: =${VOLUME_DRIVER}
-      LDAP_URL: ldap://openldap
+      LDAP_URL: ${LDAP_URI}
       LDAP_PORT: 389
       LDAP_ADMIN: ${LDAP_ADMIN}
       SLAPD_DN: ${LDAP_BASEDN}
@@ -62,7 +39,7 @@ services:
     ports:
      - "80"
     environment:
-      LDAP_URL: ldap://openldap
+      LDAP_URL: ${LDAP_URI}
       LDAP_BASE: ${LDAP_USER_BASEDN}
       LDAP_BINDDN: ${LDAP_ADMIN}
       LDAP_BINDPW: ${LDAP_PWD}
@@ -94,24 +71,6 @@ services:
       constraint:volume.driver: =${VOLUME_DRIVER}
       RELAY_MYDOMAIN: ${RELAY_MYDOMAIN}
       RELAY_HOST: ${RELAY_HOST}
-  ldap-haproxy:
-    image: openfrontier/haproxy:${HAPROXY_VERSION}
-    restart: unless-stopped
-    logging:
-      driver: "journald"
-    networks:
-     - ldap-network
-     - proxy-network
-    ports:
-     - "389:389"
-     - "25:25"
-    depends_on:
-     - "openldap"
-     - "smtp-relay"
-    environment:
-      constraint:node: =${LDAP_PROXY_NODE}
-      OPENLDAP_HOST: openldap
-      MAIL_HOST: smtp-relay
   ldap-proxy:
     image: openfrontier/ldap-proxy
     restart: unless-stopped
