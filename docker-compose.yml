@@ -208,7 +208,7 @@ services:
       DB_PASS: redmine
       REDMINE_RELATIVE_URL_ROOT: /redmine
       REDMINE_FETCH_COMMITS: hourly
-      SMTP_DOMAIN: ${LDAP_DOMAIN}
+      SMTP_DOMAIN: ${RELAY_MYDOMAIN}
       SMTP_HOST: ${SMTP_SERVER}
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USER: ${SMTP_USER}
