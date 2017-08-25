@@ -58,7 +58,7 @@ services:
     logging:
       driver: "journald"
     networks:
-      ldap-network:
+     - ldap-network
     ports:
      - "80"
     environment:
@@ -101,7 +101,6 @@ services:
       driver: "journald"
     networks:
      - ldap-network
-     - proxy-network
     ports:
      - "389:389"
      - "25:25"
