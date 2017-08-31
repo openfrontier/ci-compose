@@ -132,7 +132,6 @@ services:
       driver: "journald"
     networks:
      - ci-network
-     - proxy-network
     ports:
      - "29418"
     depends_on:
