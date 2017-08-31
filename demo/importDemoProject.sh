@@ -13,15 +13,11 @@ mkdir ./demo
 git init ./demo
 cd ./demo
 
-#start ssh agent and add ssh key
-eval $(ssh-agent)
-ssh-add "${SSH_KEY_PATH}"
-
 git config core.filemode false
 git config user.name  ${CI_INIT_ADMIN}
 git config user.email ${CI_INIT_EMAIL}
 git config push.default simple
-git remote add origin ssh://${CI_INIT_ADMIN}@${PROXY_HOST}:${GERRIT_SSH_PORT}/demo
+git remote add origin http://${CI_INIT_ADMIN}:${CI_INIT_PASSWORD}@${PROXY_HOST}/gerrit/a/demo
 git fetch -q origin
 git fetch -q origin refs/meta/config:refs/remotes/origin/meta/config
 
@@ -41,9 +37,6 @@ cp -R ../demoProject .
 git add demoProject
 git commit -m "Init project"
 git push origin
-
-#stop ssh agent
-kill ${SSH_AGENT_PID}
 
 # Remove local git repository.
 cd -
