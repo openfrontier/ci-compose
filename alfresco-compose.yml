@@ -1,0 +1,75 @@
+version: '2.1'
+networks:
+  alfresco-network:
+volumes:
+  pg-alfresco-volume:
+    driver: "${VOLUME_DRIVER}"
+  alfresco-data-volume:
+    driver: "${VOLUME_DRIVER}"
+  alfresco-tomcat-logs-volume:
+    driver: "${VOLUME_DRIVER}"
+  alfresco-content-volume:
+    driver: "${VOLUME_DRIVER}"
+services:
+  pg-alfresco:
+    image: postgres:${POSTGRES_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - alfresco-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-alfresco-volume:/var/lib/postgresql/data
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      POSTGRES_USER: alfresco
+      POSTGRES_PASSWORD: alfresco
+      POSTGRES_DB: alfresco
+  alfresco:
+    image: fjudith/alfresco
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+      alfresco-network:
+    ports:
+     - "8080"
+    volumes:
+     - alfresco-data-volume:/alfresco/alf_data
+     - alfresco-tomcat-logs-volume:/alfresco/tomcat/logs
+     - alfresco-content-volume:/content
+    depends_on:
+     - "pg-alfresco"
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      CONTENT_STORE: /content
+      ALFRESCO_HOSTNAME: ${PROXY_HOST}
+      ALFRESCO_PORT: 80
+      SHARE_HOSTNAME: ${PROXY_HOST}
+      SHARE_PORT: 80
+      DB_HOST: postgresql
+      DB_KIND: postgresql
+      DB_NAME: alfresco
+      DB_PASSWORD: alfresco
+      DB_USERNAME: alfresco
+      NOTIFICATION_EMAIL_SITEINVITE: "true"
+      LDAP_AUTH_USERNAMEFORMAT: uid=%s,${LDAP_USER_BASEDN}
+      LDAP_ENABLED: "true"
+      LDAP_GROUP_SEARCHBASE: ${LDAP_GROUP_BASEDN}
+      LDAP_SECURITY_CREDENTIALS: ${LDAP_PWD}
+      LDAP_SECURITY_PRINCIPAL: ${LDAP_ADMIN}
+      LDAP_URL: ${LDAP_URI}
+      LDAP_USER_SEARCHBASE: ${LDAP_USER_BASEDN}
+      MAIL_HOST: ${SMTP_SERVER}
+      MAIL_USERNAME: ${SMTP_USER}
+      MAIL_PASSWORD: ${SMTP_PASS}
+      MAIL_FROM_DEFAULT: ${SMTP_EMAIL}
+      MAIL_SMTP_AUTH: "true"
+  proxy:
+    image: qiuranke/docker-proxy-alfresco
+    ports:
+      - "80"
+    depends_on:
+      - "alfresco"
