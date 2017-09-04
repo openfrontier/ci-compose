@@ -31,7 +31,7 @@ services:
       POSTGRES_PASSWORD: alfresco
       POSTGRES_DB: alfresco
   alfresco:
-    image: fjudith/alfresco
+    image: fjudith/alfresco:${ALFRESCO_VERSION}
     restart: unless-stopped
     logging:
       driver: "journald"
