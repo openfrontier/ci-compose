@@ -1,6 +1,9 @@
 version: '2.1'
 networks:
   alfresco-network:
+  proxy-network:
+    external:
+      name: "${PROXY_NETWORK}"
 volumes:
   pg-alfresco-volume:
     driver: "${VOLUME_DRIVER}"
