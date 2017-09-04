@@ -36,7 +36,7 @@ services:
     logging:
       driver: "journald"
     networks:
-      alfresco-network:
+     - alfresco-network
     ports:
      - "8080"
     volumes:
@@ -72,6 +72,12 @@ services:
       MAIL_SMTP_AUTH: "true"
   proxy:
     image: openfrontier/alfresco-proxy
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - alfresco-network
+     - proxy-network
     ports:
       - "80"
     depends_on:
