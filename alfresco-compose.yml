@@ -67,3 +67,9 @@ services:
       MAIL_PASSWORD: ${SMTP_PASS}
       MAIL_FROM_DEFAULT: ${SMTP_EMAIL}
       MAIL_SMTP_AUTH: "true"
+  proxy:
+    image: qiuranke/docker-proxy-alfresco
+    ports:
+      - "80"
+    depends_on:
+      - "alfresco"
