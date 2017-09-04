@@ -48,9 +48,9 @@ services:
     environment:
       constraint:volume.driver: =${VOLUME_DRIVER}
       CONTENT_STORE: /content
-      ALFRESCO_HOSTNAME: ${PROXY_HOST}
+      ALFRESCO_HOSTNAME: ${ALFRESCO_PROXY_HOST}
       ALFRESCO_PORT: 80
-      SHARE_HOSTNAME: ${PROXY_HOST}
+      SHARE_HOSTNAME: ${ALFRESCO_PROXY_HOST}
       SHARE_PORT: 80
       DB_HOST: postgresql
       DB_KIND: postgresql
@@ -70,7 +70,7 @@ services:
       MAIL_PASSWORD: ${SMTP_PASS}
       MAIL_FROM_DEFAULT: ${SMTP_EMAIL}
       MAIL_SMTP_AUTH: "true"
-  proxy:
+  alfresco-proxy:
     image: openfrontier/alfresco-proxy
     restart: unless-stopped
     logging:
