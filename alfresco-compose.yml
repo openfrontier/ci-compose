@@ -71,7 +71,7 @@ services:
       MAIL_FROM_DEFAULT: ${SMTP_EMAIL}
       MAIL_SMTP_AUTH: "true"
   proxy:
-    image: qiuranke/docker-proxy-alfresco
+    image: openfrontier/alfresco-proxy
     ports:
       - "80"
     depends_on:
