@@ -99,7 +99,7 @@ services:
       constraint:volume.driver: =${VOLUME_DRIVER}
       JAVA_OPTS: "-Duser.timezone=Asia/Shanghai -Djenkins.install.runSetupWizard=false"
       LDAP_SERVER: ${LDAP_URI}
-      LDAP_ROOTDN: ${LDAP_USER_BASEDN}
+      LDAP_ROOTDN: ${LDAP_BASEDN}
       LDAP_INHIBIT_INFER_ROOTDN: 'false'
       LDAP_DISABLE_MAIL_ADDRESS_RESOLVER: 'false'
       GERRIT_HOST_NAME: gerrit
@@ -132,7 +132,6 @@ services:
       driver: "journald"
     networks:
      - ci-network
-     - proxy-network
     ports:
      - "29418"
     depends_on:
@@ -158,6 +157,8 @@ services:
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - ci-network
     ports:
