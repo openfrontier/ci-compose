@@ -7,12 +7,18 @@ networks:
 volumes:
   pg-alfresco-volume:
     driver: "${VOLUME_DRIVER}"
-  alfresco-data-volume:
+  alfresco-index-volume:
     driver: "${VOLUME_DRIVER}"
+    driver_opts:
+      size: 102400
   alfresco-tomcat-logs-volume:
     driver: "${VOLUME_DRIVER}"
+    driver_opts:
+      size: 51200
   alfresco-content-volume:
     driver: "${VOLUME_DRIVER}"
+    driver_opts:
+      size: 1024000
 services:
   pg-alfresco:
     image: postgres:${POSTGRES_VERSION}
@@ -32,17 +38,21 @@ services:
       POSTGRES_DB: alfresco
   alfresco:
     image: fjudith/alfresco:${ALFRESCO_VERSION}
+    mem_reservation: 1024m
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - alfresco-network
     ports:
      - "8080"
     volumes:
-     - alfresco-data-volume:/alfresco/alf_data
+     - alfresco-index-volume:/alfresco/alf_data
      - alfresco-tomcat-logs-volume:/alfresco/tomcat/logs
      - alfresco-content-volume:/content
+     - /etc/localtime:/etc/localtime:ro
     depends_on:
      - "pg-alfresco"
     environment:
