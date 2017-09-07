@@ -45,6 +45,7 @@ services:
      - alfresco-data-volume:/alfresco/alf_data
      - alfresco-tomcat-logs-volume:/alfresco/tomcat/logs
      - alfresco-content-volume:/content
+     - /etc/localtime:/etc/localtime:ro
     depends_on:
      - "pg-alfresco"
     environment:
