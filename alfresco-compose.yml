@@ -35,6 +35,8 @@ services:
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - alfresco-network
     ports:
