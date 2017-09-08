@@ -76,7 +76,7 @@ services:
       MAIL_PASSWORD: ${SMTP_PASS}
       MAIL_FROM_DEFAULT: ${SMTP_EMAIL}
       MAIL_SMTP_AUTH: "true"
-      CATALINA_OPTS: "-Duser.timezone=${TIMEZONE}"
+      CATALINA_OPTS: "-Duser.timezone=${TIMEZONE} -Xms512M -Xmx2048M"
   alfresco-proxy:
     image: openfrontier/alfresco-proxy
     restart: unless-stopped
