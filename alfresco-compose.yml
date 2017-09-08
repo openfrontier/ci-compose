@@ -58,6 +58,8 @@ services:
       constraint:volume.driver: =${VOLUME_DRIVER}
       CONTENT_STORE: /content
       REVERSE_PROXY_URL: "http://${ALFRESCO_PROXY_HOST}"
+      ALFRESCO_PORT: 80
+      SHARE_PORT: 80
       DB_HOST: pg-alfresco
       DB_KIND: postgresql
       DB_NAME: alfresco
