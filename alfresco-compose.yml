@@ -52,13 +52,14 @@ services:
      - alfresco-index-volume:/alfresco/alf_data
      - alfresco-tomcat-logs-volume:/alfresco/tomcat/logs
      - alfresco-content-volume:/content
-     - /etc/localtime:/etc/localtime:ro
     depends_on:
      - "pg-alfresco"
     environment:
       constraint:volume.driver: =${VOLUME_DRIVER}
       CONTENT_STORE: /content
       REVERSE_PROXY_URL: "http://${ALFRESCO_PROXY_HOST}"
+      ALFRESCO_PORT: 80
+      SHARE_PORT: 80
       DB_HOST: pg-alfresco
       DB_KIND: postgresql
       DB_NAME: alfresco
@@ -77,6 +78,7 @@ services:
       MAIL_PASSWORD: ${SMTP_PASS}
       MAIL_FROM_DEFAULT: ${SMTP_EMAIL}
       MAIL_SMTP_AUTH: "true"
+      CATALINA_OPTS: "-Duser.timezone=${TIMEZONE} -Xms512M -Xmx2048M"
   alfresco-proxy:
     image: openfrontier/alfresco-proxy
     restart: unless-stopped
