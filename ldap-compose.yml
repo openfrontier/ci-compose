@@ -83,8 +83,6 @@ services:
     ports:
      - "389:389"
      - "25:25"
-    depends_on:
-     - "smtp-relay"
     environment:
       constraint:node: =${LDAP_PROXY_NODE}
       ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
