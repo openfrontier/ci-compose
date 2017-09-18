@@ -23,7 +23,7 @@ services:
      - lam-config-volume:/var/www/html/lam/config
     environment:
       constraint:volume.driver: =${VOLUME_DRIVER}
-      LDAP_URL: ${LDAP_URI}
+      LDAP_URL: ldap://ldap-haproxy
       LDAP_PORT: 389
       LDAP_ADMIN: ${LDAP_ADMIN}
       SLAPD_DN: ${LDAP_BASEDN}
@@ -39,7 +39,7 @@ services:
     ports:
      - "80"
     environment:
-      LDAP_URL: ${LDAP_URI}
+      LDAP_URL: ldap://ldap-haproxy
       LDAP_BASE: ${LDAP_USER_BASEDN}
       LDAP_BINDDN: ${LDAP_ADMIN}
       LDAP_BINDPW: ${LDAP_PWD}
@@ -72,10 +72,12 @@ services:
       RELAY_MYDOMAIN: ${RELAY_MYDOMAIN}
       RELAY_HOST: ${RELAY_HOST}
   ldap-haproxy:
-    image: openfrontier/haproxy:${HAPROXY_VERSION}
+    image: openfrontier/haproxy-etcd:${HAPROXY_VERSION}
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - ldap-network
     ports:
@@ -85,8 +87,8 @@ services:
      - "smtp-relay"
     environment:
       constraint:node: =${LDAP_PROXY_NODE}
-      OPENLDAP_HOST: ${OPENLDAP_HOST}
-      MAIL_HOST: smtp-relay
+      ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
+      PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
   ldap-proxy:
     image: openfrontier/ldap-proxy
     restart: unless-stopped
