@@ -111,10 +111,12 @@ services:
       ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
       PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
   ldap-proxy:
-    image: openfrontier/ldap-proxy
+    image: openfrontier/nginx-etcd:latest
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - ldap-network
      - proxy-network
@@ -125,7 +127,5 @@ services:
      - "ssp"
     environment:
       #constraint:node: =${LDAP_PROXY_NODE}
-      SERVER_NAME: ${LDAP_PROXY_HOST}
-      CLIENT_MAX_BODY_SIZE: 200m
-      LAM_HOST: lam
-      SSP_HOST: ssp
+      PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+      ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
