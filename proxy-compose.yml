@@ -3,16 +3,17 @@ networks:
   proxy-network:
 services:
   proxy00:
-    image: nginx:stable-alpine
+    image: openfrontier/nginx-etcd:latest
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - proxy-network
     ports:
      - "80:80"
     environment:
       constraint:node: =${PROXY_NODE}
-      CLIENT_MAX_BODY_SIZE: 500m
-    volumes:
-     - ./proxy.conf:/etc/nginx/conf.d/default.conf:ro
+      PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+      ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
