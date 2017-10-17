@@ -65,7 +65,6 @@ services:
       DB_NAME: alfresco
       DB_PASSWORD: alfresco
       DB_USERNAME: alfresco
-      NOTIFICATION_EMAIL_SITEINVITE: "true"
       LDAP_AUTH_USERNAMEFORMAT: uid=%s,${LDAP_USER_BASEDN}
       LDAP_ENABLED: "true"
       LDAP_GROUP_SEARCHBASE: ${LDAP_GROUP_BASEDN}
