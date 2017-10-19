@@ -51,12 +51,12 @@ services:
     volumes:
      - alfresco-index-volume:/alfresco/alf_data
      - alfresco-tomcat-logs-volume:/alfresco/tomcat/logs
-     - alfresco-content-volume:/content
+     - alfresco-content-volume:/alfresco/content
     depends_on:
      - "pg-alfresco"
     environment:
       constraint:volume.driver: =${VOLUME_DRIVER}
-      CONTENT_STORE: /content
+      CONTENT_STORE: /alfresco/content
       REVERSE_PROXY_URL: "http://${ALFRESCO_PROXY_HOST}"
       ALFRESCO_PORT: 80
       SHARE_PORT: 80
