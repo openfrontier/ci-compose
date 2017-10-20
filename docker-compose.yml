@@ -120,19 +120,22 @@ services:
       PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
   haproxy:
-    image: openfrontier/haproxy:${HAPROXY_VERSION}
+    image: openfrontier/haproxy-etcd:${HAPROXY_VERSION}
     restart: unless-stopped
     logging:
       driver: "journald"
+    dns:
+     - ${DNS_SERVER}
     networks:
      - ci-network
     ports:
-     - "29418"
+     - "${GERRIT_SSH_PORT}:29418"
     depends_on:
      - "gerrit"
     environment:
       constraint:node: =${PROXY_NODE}
-      GERRIT_HOST: gerrit
+      ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
+      PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     restart: unless-stopped
