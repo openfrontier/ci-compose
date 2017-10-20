@@ -1,0 +1,79 @@
+version: '2.1'
+networks:
+  ci-network:
+  proxy-network:
+    external:
+      name: "${PROXY_NETWORK}"
+volumes:
+  pg-redmine-volume:
+    driver: "${VOLUME_DRIVER}"
+  redmine-data-volume:
+    driver: "${VOLUME_DRIVER}"
+  redmine-log-volume:
+    driver: "${VOLUME_DRIVER}"
+services:
+  proxy:
+    image: openfrontier/nginx:${NGINX_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+     - proxy-network
+    ports:
+     - "80"
+    depends_on:
+     - "gerrit"
+     - "jenkins"
+     - "nexus"
+     - "redmine"
+    environment:
+      SERVER_NAME: ${PROXY_HOST}
+      CLIENT_MAX_BODY_SIZE: 200m
+  pg-redmine:
+    image: postgres:${POSTGRES_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-redmine-volume:/var/lib/postgresql/data
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: redmine
+      POSTGRES_DB: redmine
+  redmine:
+    image: sameersbn/redmine:${REDMINE_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    dns:
+     - ${DNS_SERVER}
+    networks:
+      ci-network:
+    ports:
+     - "80"
+    volumes:
+     - redmine-log-volume:/var/log/redmine
+     - redmine-data-volume:/home/redmine/data
+    depends_on:
+     - "pg-redmine"
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      DB_ADAPTER: postgresql
+      DB_HOST: pg-redmine
+      DB_NAME: redmine
+      DB_USER: redmine
+      DB_PASS: redmine
+      REDMINE_RELATIVE_URL_ROOT: /redmine
+      REDMINE_FETCH_COMMITS: hourly
+      SMTP_DOMAIN: ${RELAY_MYDOMAIN}
+      SMTP_HOST: ${SMTP_SERVER}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      NGINX_MAX_UPLOAD_SIZE: 200m
