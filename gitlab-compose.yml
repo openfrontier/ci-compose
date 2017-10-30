@@ -1,0 +1,86 @@
+version: '2.1'
+networks:
+  ci-network:
+  proxy-network:
+    external:
+      name: "${PROXY_NETWORK}"
+volumes:
+  pg-gitlab-volume:
+    driver: "${VOLUME_DRIVER}"
+    driver_opts:
+      size: 51200
+  gitlab-config-volume:
+    driver: "${VOLUME_DRIVER}"
+    driver_opts:
+      size: 1024
+  gitlab-log-volume:
+    driver: "${VOLUME_DRIVER}"
+    driver_opts:
+      size: 51200
+  gitlab-data-volume:
+    driver: "${VOLUME_DRIVER}"
+services:
+  pg-gitlab:
+    image: postgres:${POSTGRES_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    networks:
+     - ci-network
+    ports:
+     - "5432"
+    volumes:
+     - pg-gitlab-volume:/var/lib/postgresql/data
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      POSTGRES_USER: gitlab
+      POSTGRES_PASSWORD: gitlab
+      POSTGRES_DB: gitlab
+  gitlab:
+    image: gitlab/gitlab-ce:${GITLAB_VERSION}
+    restart: unless-stopped
+    logging:
+      driver: "journald"
+    dns:
+     - ${DNS_SERVER}
+    networks:
+     - ci-network
+     - proxy-network
+    ports:
+      - '80'
+      - '22'
+    volumes:
+      - gitlab-config-volume:/etc/gitlab
+      - gitlab-log-volume:/var/log/gitlab
+      - gitlab-data-volume:/var/opt/gitlab
+    depends_on:
+     - "pg-gitlab"
+    environment:
+      constraint:volume.driver: =${VOLUME_DRIVER}
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://${GITLAB_PROXY_HOST}'
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
+        gitlab_rails['time_zone'] = "${TIMEZONE}"
+        postgresql['enable'] = false
+        gitlab_rails['db_adapter'] = "postgresql"
+        gitlab_rails['db_encoding'] = "unicode"
+        gitlab_rails['db_database'] = "gitlab"
+        gitlab_rails['db_pool'] = 10
+        gitlab_rails['db_username'] = "gitlab"
+        gitlab_rails['db_password'] = "gitlab"
+        gitlab_rails['db_host'] = "pg-gitlab"
+        gitlab_rails['db_port'] = 5432
+        gitlab_rails['smtp_enable'] = true
+        gitlab_rails['smtp_address'] = "${SMTP_SERVER}"
+        gitlab_rails['smtp_port'] = 25
+        gitlab_rails['smtp_user_name'] = "${SMTP_USER}"
+        gitlab_rails['smtp_password'] = "${SMTP_PASS}"
+        gitlab_rails['smtp_authentication'] = "login"
+        gitlab_rails['gitlab_email_enabled'] = true
+        gitlab_rails['gitlab_email_from'] = "${SMTP_EMAIL}"
+        gitlab_rails['gitlab_email_display_name'] = 'Gitlab'
+        gitlab_rails['gitlab_email_reply_to'] = "${SMTP_EMAIL}"
+        gitlab_rails['gitlab_email_subject_suffix'] = ''
+        gitlab_rails['gitlab_default_projects_features_builds'] = false
+        gitlab_rails['gitlab_default_projects_features_container_registry'] = false
+        prometheus_monitoring['enable'] = false
