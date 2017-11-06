@@ -130,12 +130,18 @@ services:
      - ci-network
     ports:
      - "${GERRIT_SSH_PORT}:29418"
+     - "8000"
     depends_on:
      - "gerrit"
     environment:
-      constraint:node: =${PROXY_NODE}
-      ETCD_CLIENT_IP: ${ETCD_CLIENT_IP}
-      PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+     - constraint:node==${PROXY_NODE}
+     - ETCD_CLIENT_IP=${ETCD_CLIENT_IP}
+     - PROJECT_NAME=${COMPOSE_PROJECT_NAME}
+     - TIMEOUT_CONNECT=5s
+     - TIMEOUT_CLIENT=50s
+     - TIMEOUT_SERVER=50s
+     - TIMEOUT_HTTP_KEEP_ALIVE=50s
+     - MAXCONN=2000
   jenkins-agent:
     image: openfrontier/jenkins-swarm-maven-slave:${JENKINS_SWARM_VERSION}
     restart: unless-stopped
